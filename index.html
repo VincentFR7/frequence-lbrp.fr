@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Générateur de fréquences (LBRP)</title>
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      background-color: #1a1a1a;
+      color: #f1f1f1;
+      margin: 0;
+      padding: 50px;
+      text-align: center;
+    }
+
+    .container {
+      background-color: #2a2a2a;
+      padding: 30px;
+      border-radius: 12px;
+      display: inline-block;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    .frequencies {
+      font-size: 20px;
+      margin-top: 20px;
+      white-space: pre-line;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      background-color: #444;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #666;
+    }
+
+    .signature {
+      margin-top: 30px;
+      font-size: 14px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Générateur de fréquences du jour (LBRP)</h1>
+    <div class="frequencies" id="output">
+      Clique sur le bouton pour lancer la génération de fréquence
+    </div>
+    <button onclick="generateFrequencies()">Générer</button>
+    <div class="signature">Fait par Vincent Steven</div>
+  </div>
+
+  <script>
+    function generateFrequencies() {
+      const min = 91.2;
+      const max = 99.4;
+      const used = new Set();
+
+      function getRandomFreq() {
+        let freq;
+        do {
+          freq = Math.round((Math.random() * (max - min) + min) * 10) / 10;
+        } while (used.has(freq));
+        used.add(freq);
+        return freq.toFixed(1);
+      }
+
+      const labels = ['RDJ', 'S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9'];
+      let output = '';
+      labels.forEach(label => {
+        output += `${label} : ${getRandomFreq()}\n`;
+      });
+
+      document.getElementById('output').innerText = output;
+    }
+  </script>
+
+</body>
+</html>
