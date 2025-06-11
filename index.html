@@ -2,11 +2,12 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Générateur de fréquences (LBRP)</title>
+  <title>Générateur de fréquences LBRP</title>
   <style>
     body {
       font-family: 'Courier New', monospace;
-      background-color: #1a1a1a;
+      background: url('https://i.imgur.com/Ur0b8WX.jpeg') no-repeat center center fixed;
+      background-size: cover;
       color: #f1f1f1;
       margin: 0;
       padding: 50px;
@@ -14,11 +15,11 @@
     }
 
     .container {
-      background-color: #2a2a2a;
+      background-color: rgba(20, 20, 20, 0.85);
       padding: 30px;
       border-radius: 12px;
       display: inline-block;
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
     }
 
     h1 {
@@ -51,7 +52,7 @@
     .signature {
       margin-top: 30px;
       font-size: 14px;
-      color: #888;
+      color: #aaa;
     }
   </style>
 </head>
@@ -72,11 +73,15 @@
       const max = 99.4;
       const used = new Set();
 
-      function getRandomFreq() {
+      function getValidFreq() {
         let freq;
         do {
           freq = Math.round((Math.random() * (max - min) + min) * 10) / 10;
-        } while (used.has(freq));
+        } while (
+          used.has(freq) ||
+          freq % 1 === 0 || // évite .0
+          (freq * 10) % 10 === 1 // évite .1
+        );
         used.add(freq);
         return freq.toFixed(1);
       }
@@ -84,7 +89,7 @@
       const labels = ['RDJ', 'S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9'];
       let output = '';
       labels.forEach(label => {
-        output += `${label} : ${getRandomFreq()}\n`;
+        output += `${label} : ${getValidFreq()}\n`;
       });
 
       document.getElementById('output').innerText = output;
