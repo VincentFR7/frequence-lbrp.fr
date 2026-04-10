@@ -97,3 +97,29 @@
 
 </body>
 </html>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Protection</title>
+</head>
+<body>
+
+<script>
+// Bloque 
+document.addEventListener('keydown', function(e) {
+    if (e.ctrlKey && e.key.toLowerCase() === 'u') {
+        e.preventDefault();
+        return false;
+    }
+});
+
+// Bloque 
+document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+});
+</script>
+  
+</body>
+</html>
