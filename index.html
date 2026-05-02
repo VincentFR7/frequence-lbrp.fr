@@ -1,18 +1,55 @@
+<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
   <title>Générateur de fréquences LBRP</title>
+
   <style>
     body {
       font-family: 'Courier New', monospace;
-      background: url('https://i.imgur.com/yTKOP8j.jpeg') no-repeat center center fixed;
-      background-size: cover;
-      color: #f1f1f1;
       margin: 0;
       padding: 50px;
       text-align: center;
+      color: #f1f1f1;
+      overflow: hidden;
     }
 
+    /* Background slider */
+    .background-slider {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: black;
+    }
+
+    .background-slider img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+
+      opacity: 0;
+      transform: scale(1.05);
+      transition: opacity 1.5s ease-in-out, transform 8s ease;
+    }
+
+    .background-slider img.active {
+      opacity: 1;
+      z-index: 2;
+      transform: scale(1.1);
+    }
+
+    .background-slider img.prev {
+      opacity: 1;
+      z-index: 1;
+    }
+
+    /* Contenu */
     .container {
       background-color: rgba(20, 20, 20, 0.85);
       padding: 30px;
@@ -55,21 +92,35 @@
     }
   </style>
 </head>
+
 <body>
 
+  <!-- Images -->
+  <div class="background-slider">
+    <img src="https://i.imgur.com/eSh6IYI.jpeg" class="active">
+    <img src="https://i.imgur.com/VudcbJZ.jpeg">
+    <img src="https://i.imgur.com/qdJtX2s.jpeg">
+    <img src="https://i.imgur.com/PKU2qMG.png">
+  </div>
+
+  <!-- Interface -->
   <div class="container">
     <h1>Générateur de fréquences du jour (LBRP)</h1>
+
     <div class="frequencies" id="output">
       Clique sur le bouton pour lancer la génération de fréquence
     </div>
+
     <button onclick="generateFrequencies()">Générer</button>
-<div class="signature">
-  Fait par Vincent Steven<br>
-  En cas de problème avec le générateur ou que le lien n'est plus valide contacter sur discord : vincent_fr75
-</div>
+
+    <div class="signature">
+      Fait par Vincent Steven<br>
+      Contact Discord : vincent_fr75
+    </div>
   </div>
 
   <script>
+    // Générateur
     function generateFrequencies() {
       const min = 91.2;
       const max = 99.4;
@@ -81,8 +132,8 @@
           freq = Math.round((Math.random() * (max - min) + min) * 10) / 10;
         } while (
           used.has(freq) ||
-          freq % 1 === 0 || // évite .0
-          (freq * 10) % 10 === 1 // évite .1
+          freq % 1 === 0 ||
+          (freq * 10) % 10 === 1
         );
         used.add(freq);
         return freq.toFixed(1);
@@ -90,39 +141,44 @@
 
       const labels = ['RDJ', 'S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9'];
       let output = '';
+
       labels.forEach(label => {
         output += `${label} : ${getValidFreq()}\n`;
       });
 
       document.getElementById('output').innerText = output;
     }
-  </script>
 
-</body>
-</html>
+    // Slider fluide sans bug
+    const slides = document.querySelectorAll('.background-slider img');
+    let index = 0;
 
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Protection</title>
-</head>
-<body>
+    setInterval(() => {
+      let current = slides[index];
+      let nextIndex = (index + 1) % slides.length;
+      let next = slides[nextIndex];
 
-<script>
-// Bloque 
-document.addEventListener('keydown', function(e) {
-    if (e.ctrlKey && e.key.toLowerCase() === 'u') {
+      slides.forEach(img => img.classList.remove('active', 'prev'));
+
+      current.classList.add('prev');
+      next.classList.add('active');
+
+      index = nextIndex;
+    }, 4000);
+
+    // Protection clic droit
+    document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+    });
+
+    // Protection Ctrl+U
+    document.addEventListener('keydown', function(e) {
+      if (e.ctrlKey && e.key.toLowerCase() === 'u') {
         e.preventDefault();
         return false;
-    }
-});
+      }
+    });
+  </script>
 
-// Bloque 
-document.addEventListener('contextmenu', function(e) {
-    e.preventDefault();
-});
-</script>
-  
 </body>
 </html>
